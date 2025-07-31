@@ -2,12 +2,92 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sound Buttons</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Soundboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f4f4f4;
+      text-align: center;
+    }
+
+    #buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .btn, .stop {
+      padding: 15px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: #fff;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #2980b9;
+    }
+
+    .stop {
+      background-color: #e74c3c;
+    }
+
+    .stop:hover {
+      background-color: #c0392b;
+    }
+  </style>
 </head>
 <body>
+
+  <h1>🔊 Soundboard</h1>
   <div id="buttons"></div>
 
-  <script src="script.js"></script>
+  <script>
+    const sounds = [
+      { name: 'Clap', url: 'https://www.soundjay.com/button/sounds/button-4.mp3' },
+      { name: 'Pop', url: 'https://www.soundjay.com/button/sounds/button-16.mp3' },
+      { name: 'Click', url: 'https://www.soundjay.com/button/sounds/button-09.mp3' },
+      { name: 'Snap', url: 'https://www.soundjay.com/button/sounds/button-3.mp3' },
+      { name: 'Ping', url: 'https://www.soundjay.com/button/sounds/button-10.mp3' },
+      { name: 'Beep', url: 'https://www.soundjay.com/button/sounds/button-5.mp3' }
+    ];
+
+    const buttonsContainer = document.getElementById('buttons');
+    const audioElements = {};
+
+    sounds.forEach(({ name, url }) => {
+      const btn = document.createElement('button');
+      btn.classList.add('btn');
+      btn.innerText = name;
+      btn.addEventListener('click', () => {
+        stopSounds();
+        audioElements[name].play();
+      });
+
+      const audio = new Audio(url);
+      audioElements[name] = audio;
+
+      buttonsContainer.appendChild(btn);
+    });
+
+    const stopBtn = document.createElement('button');
+    stopBtn.classList.add('stop');
+    stopBtn.innerText = 'Stop';
+    stopBtn.addEventListener('click', stopSounds);
+    buttonsContainer.appendChild(stopBtn);
+
+    function stopSounds() {
+      for (const sound in audioElements) {
+        const audio = audioElements[sound];
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    }
+  </script>
 </body>
 </html>
